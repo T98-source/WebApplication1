@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,10 +13,15 @@ namespace WebApplication1
     public class TimerMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly string _cookieName;
+        private readonly int _timeout;
 
-        public TimerMiddleware(RequestDelegate next)
+       public TimerMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _cookieName = configuration["TimerMiddleware:CookieName"];
+            //_timeout = int.Parse(configuration["TimerMiddleware:Timeout"]);
+            _timeout = configuration.GetValue<int>("TimerMiddleware:Timeout");
         }
 
         public async Task Invoke(HttpContext context)
@@ -27,7 +33,7 @@ namespace WebApplication1
             {
                 timer.Stop();
                 var httpContext = (HttpContext)state;
-                httpContext.Response.Headers.Add("X-Elapsed", new[] { timer.Elapsed.ToString() });
+                httpContext.Response.Headers.Add(_cookieName, new[] { timer.Elapsed.ToString() });
 
                 return Task.CompletedTask;
             }, context);

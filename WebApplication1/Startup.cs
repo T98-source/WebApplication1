@@ -25,7 +25,7 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //prima Midlleware Time
+            //prima  Midlleware Time
             //app.UseTimer();
 
             //if(env.IsDevelopment()) //se sono in ambiente di sviluppo -> come lo capisco? progetto->proprietà->Debug  In ambiente di produzione cambierò questa variabile
